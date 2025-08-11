@@ -18,6 +18,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] InputActionAsset inputActions;
     InputAction moveAction;
     InputAction jumpAction;
+    InputAction animTestAction;
 
     Rigidbody2D rb;
 
@@ -25,9 +26,10 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField] LayerMask groundLayer;
 
-    GroundState curGroundState = GroundState.Airborne;
-    GroundState lastFrameGroundState = GroundState.Airborne;
-    enum GroundState
+    public GroundState curGroundState = GroundState.Airborne;
+    public GroundState lastFrameGroundState = GroundState.Airborne;
+
+    public enum GroundState
     {
         Airborne = 0,
         Grounded = 1
@@ -42,6 +44,7 @@ public class PlayerController : NetworkBehaviour
 
         moveAction = inputActions.FindAction("Move");
         jumpAction = inputActions.FindAction("Jump");
+        animTestAction = inputActions.FindAction("AnimTest");
         rb = GetComponent<Rigidbody2D>();
 
         jumpBufferCurTime = jumpBufferLength;
@@ -64,6 +67,11 @@ public class PlayerController : NetworkBehaviour
         // {
         //     UpdateGroundedClientRpc(curGroundState);
         // }
+
+        if (animTestAction.WasPressedThisFrame())
+        {
+            animator.SetTrigger("testAnim");
+        }
 
         //Calculate Movement Force
         Vector3 moveforce = Vector3.right * moveAction.ReadValue<Vector2>().x * moveSpeed;  // Initial movement force
