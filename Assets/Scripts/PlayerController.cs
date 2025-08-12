@@ -16,6 +16,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] float jumpSpeed = 5f;
 
     [SerializeField] InputActionAsset inputActions;
+    [SerializeField] Renderer playerRenderer;
     InputAction moveAction;
     InputAction jumpAction;
     InputAction animTestAction;
@@ -37,6 +38,11 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField] Animator animator;
 
+    public override void OnNetworkSpawn()
+    {
+        int playerIndex = (int)GetComponent<NetworkObject>().OwnerClientId;
+        playerRenderer.material.color = GameObject.Find("PlayerManager").GetComponent<PlayerManager>().playerColors[playerIndex];
+    }
 
     void Start()
     {

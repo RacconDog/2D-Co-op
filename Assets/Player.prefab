@@ -194,6 +194,7 @@ MonoBehaviour:
   jumpBufferLength: 0.1
   jumpSpeed: 5
   inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  playerRenderer: {fileID: 2122618527312552052}
   groundCheckDistance: 0.1
   groundLayer:
     serializedVersion: 2
