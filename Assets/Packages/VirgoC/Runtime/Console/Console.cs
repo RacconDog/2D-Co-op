@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
+
+
 namespace DeveloperConsole
 {
     public class Console : MonoBehaviour

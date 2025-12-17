@@ -4,39 +4,56 @@ using UnityEngine.InputSystem;
 using Unity.Mathematics;
 using System;
 using Unity.VisualScripting;
+using NUnit.Framework;
+using RangeAttribute = UnityEngine.RangeAttribute;
 
 public class PlayerController : NetworkBehaviour
 {
+    [Header("Movement")]
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float moveSpeedCap = 10f;
-    [SerializeField] float moveSpeedDamp = 10f;
     [SerializeField][Range(0, 1)] float moveDragFactor = 10f;
+
+    [Header("Jump")]
     [SerializeField] float jumpBufferLength = 10f;
     float jumpBufferCurTime = 0f;
     [SerializeField] float jumpSpeed = 5f;
 
+    [Header("References")]
     [SerializeField] InputActionAsset inputActions;
     [SerializeField] Renderer playerRenderer;
+    [SerializeField] Animator animator;
     InputAction moveAction;
     InputAction jumpAction;
     InputAction animTestAction;
-
+    InputAction interactAction;
+    InputAction stationAim;
+    InputAction StationAction;
     Rigidbody2D rb;
 
+    [Header("Ground Check")]
     [SerializeField] float groundCheckDistance = 0.1f;
-
     [SerializeField] LayerMask groundLayer;
-
-    public GroundState curGroundState = GroundState.Airborne;
-    public GroundState lastFrameGroundState = GroundState.Airborne;
-
+    [SerializeField] GroundState curGroundState = GroundState.Airborne;
+    [SerializeField] GroundState lastFrameGroundState = GroundState.Airborne;
     public enum GroundState
     {
         Airborne = 0,
         Grounded = 1
     }
 
-    [SerializeField] Animator animator;
+    [Header("Interaction")]
+    [SerializeField] float interactionDistance = 100f;
+    [SerializeField] GameObject curStation;
+    GameObject[] stationList;
+
+    [Header("Misc")]
+    PlayerState playerState = PlayerState.Moving;
+    enum PlayerState
+    {
+        AtStation,
+        Moving
+    }
 
     public override void OnNetworkSpawn()
     {
@@ -51,29 +68,88 @@ public class PlayerController : NetworkBehaviour
         moveAction = inputActions.FindAction("Move");
         jumpAction = inputActions.FindAction("Jump");
         animTestAction = inputActions.FindAction("AnimTest");
+        interactAction = inputActions.FindAction("Interact");
+        stationAim = inputActions.FindAction("StationAim");
+        StationAction = inputActions.FindAction("StationAction");
+
         rb = GetComponent<Rigidbody2D>();
+        stationList = GameObject.FindGameObjectsWithTag("Station");
 
         jumpBufferCurTime = jumpBufferLength;
+
     }
 
     void Update()
     {
+        //Check and manage ground states for the local and remote player
         curGroundState = CheckGroundState();
         animator.SetBool("isGrounded", Convert.ToBoolean(curGroundState));
 
-        if (curGroundState != lastFrameGroundState)
-        {
-            // print("is owner: " + IsOwner + " | " + transform.position.y);
-            print(curGroundState + " | " + lastFrameGroundState);
-        }
-
         if (!IsOwner) return;
 
-        // if (curGroundState != lastFrameGroundState)
-        // {
-        //     UpdateGroundedClientRpc(curGroundState);
-        // }
+        if (playerState == PlayerState.AtStation)
+            AtStation();
+            
+        else if (playerState == PlayerState.Moving)
+            Movement();
+    }
 
+    void AtStation()
+    {
+        // Exit Station
+        if (interactAction.WasPressedThisFrame())
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            playerState = PlayerState.Moving;
+
+            curStation.GetComponent<AbstractStation>().SetIsOccupiedServerRpc(false);
+            curStation = null;
+        }
+
+        // Station Logic
+        if (curStation != null)
+        {
+            curStation.GetComponent<AbstractStation>().StationUpdateDir(stationAim.ReadValue<Vector2>());
+            if (StationAction.IsPressed())
+                curStation.GetComponent<AbstractStation>().StationAction();
+        }
+    }
+
+    void Movement()
+    {
+        if (IsOwner)
+        {
+            // Interaction Logic
+            if (interactAction.WasPressedThisFrame())
+            {
+                GameObject closestStation = null;
+                float closestStationDist = 9999f;
+
+                foreach (GameObject station in stationList)
+                {
+                    float curStationDist = Vector2.Distance(transform.position, station.transform.position);
+                    if (curStationDist < closestStationDist && curStationDist < interactionDistance && station.GetComponent<AbstractStation>().isOccupied.Value == false)
+                    {
+                        closestStation = station;
+                        closestStationDist = curStationDist;
+                    }
+                }
+
+                //EnterStation
+                if (closestStation != null)
+                {
+                    playerState = PlayerState.AtStation;
+                    transform.position = closestStation.transform.position;
+                    // rb.linearVelocity = Vector2.zero;
+                    rb.bodyType = RigidbodyType2D.Static;
+
+                    curStation = closestStation;
+                    curStation.GetComponent<AbstractStation>().SetIsOccupiedServerRpc(true);
+                    return;
+                }
+            }
+        }
+        
         if (animTestAction.WasPressedThisFrame())
         {
             animator.SetTrigger("testAnim");
@@ -110,10 +186,6 @@ public class PlayerController : NetworkBehaviour
         //Apply Calculated Forces
         rb.AddForce(moveforce, ForceMode2D.Force);
         rb.AddForce(jumpForce, ForceMode2D.Impulse);
-
-
-        // Update Animator Vars
-        // animator.SetFloat("yVelo", rb.linearVelocityY);
     }
 
     void LateUpdate()
