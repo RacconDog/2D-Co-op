@@ -32,7 +32,7 @@ public class ShootStation : AbstractStation
         shootCooldown = 1f / bulletsPerSecond;
     }
 
-    override public void StationAction()
+    override public void StationAction(bool isPressedThisFrame)
     {
         if (shootCooldown < 0)
         {

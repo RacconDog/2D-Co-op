@@ -1,5 +1,7 @@
 using System;
 using Unity.Mathematics;
+using Unity.VisualScripting;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class EngineSpeedStation : AbstractStation
@@ -10,28 +12,44 @@ public class EngineSpeedStation : AbstractStation
     [SerializeField] Rigidbody2D shipRB;
     [SerializeField] Transform thrusterTransform;
 
-    override public void StationUpdateDir(Vector2 dir)
-    {
+    [SerializeField] SpriteRenderer[] gearIndicators;
+    [SerializeField] Color[] gearColors;
 
-    }
+    [SerializeField] int currentGear = 0;
     
-    override public void StationAction()
+    override public void StationUpdateDir(Vector2 dir) {}
+
+    public override void StationAction(bool isPressedThisFrame)
     {
-        
+        if (isPressedThisFrame)
+        {
+            currentGear++;
+            currentGear %= gearIndicators.Length + 1;
+        }
+
+        for (int i = 0; i < gearIndicators.Length; i++)
+        {
+            gearIndicators[i].color = Color.black;
+
+            if (i < currentGear)
+                gearIndicators[i].color = gearColors[currentGear];
+        }
     }
-    
+
 
     protected override void Update()
     {
         base.Update();
 
-        
-        Vector2 forceVector = (Mathf.Cos(thrusterTransform.rotation.eulerAngles.z * Mathf.Deg2Rad) * Vector2.right +
-                               Mathf.Sin(thrusterTransform.rotation.eulerAngles.z * Mathf.Deg2Rad) * Vector2.up) * MoveSpeed;
-        forceVector *= -1;
+        float angle = (thrusterTransform.rotation.eulerAngles.z + 90) * Mathf.Deg2Rad;
+        Vector2 forceVector = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * MoveSpeed * Time.deltaTime;
 
-        shipRB.AddForce(forceVector, ForceMode2D.Force);
+        forceVector *= -1;
         
+        forceVector *= currentGear / 3.0f;
+
+        shipRB.AddForce(forceVector * shipRB.mass, ForceMode2D.Force);
+
         if (shipRB.linearVelocity.magnitude > SpeedCap)
         {
             shipRB.linearVelocity = shipRB.linearVelocity.normalized * SpeedCap;

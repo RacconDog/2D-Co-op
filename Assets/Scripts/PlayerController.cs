@@ -23,12 +23,15 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] InputActionAsset inputActions;
     [SerializeField] Renderer playerRenderer;
     [SerializeField] Animator animator;
+    Transform playerSpawnPoint;
+
     InputAction moveAction;
     InputAction jumpAction;
     InputAction animTestAction;
     InputAction interactAction;
     InputAction stationAim;
-    InputAction StationAction;
+    InputAction StationAction; 
+
     Rigidbody2D rb;
 
     [Header("Ground Check")]
@@ -55,10 +58,17 @@ public class PlayerController : NetworkBehaviour
         Moving
     }
 
+    //internal
+    Vector2 lastShipPosition = Vector2.zero;
+
     public override void OnNetworkSpawn()
     {
         int playerIndex = (int)GetComponent<NetworkObject>().OwnerClientId;
         playerRenderer.material.color = GameObject.Find("PlayerManager").GetComponent<PlayerManager>().playerColors[playerIndex];
+
+
+        playerSpawnPoint = GameObject.Find("PlayerSpawn").transform;
+        transform.position = playerSpawnPoint.position;
     }
 
     void Start()
@@ -111,7 +121,7 @@ public class PlayerController : NetworkBehaviour
         {
             curStation.GetComponent<AbstractStation>().StationUpdateDir(stationAim.ReadValue<Vector2>());
             if (StationAction.IsPressed())
-                curStation.GetComponent<AbstractStation>().StationAction();
+                curStation.GetComponent<AbstractStation>().StationAction(StationAction.WasPressedThisFrame());
         }
     }
 
@@ -196,13 +206,21 @@ public class PlayerController : NetworkBehaviour
 
     GroundState CheckGroundState()
     {
-        RaycastHit2D hit = Physics2D.Raycast(
-            new Vector2(transform.position.x, transform.position.y - (GetComponent<BoxCollider2D>().bounds.size.y / 2)),
+        // left side ground check
+        RaycastHit2D hitL = Physics2D.Raycast(
+            new Vector2(transform.position.x - (GetComponent<CapsuleCollider2D>().bounds.size.x / 2), transform.position.y - (GetComponent<CapsuleCollider2D>().bounds.size.y / 2)),
             Vector2.down,
             groundCheckDistance,
             groundLayer);
 
-        if (hit)
+        //right side ground check
+        RaycastHit2D hitR = Physics2D.Raycast(
+            new Vector2(transform.position.x + (GetComponent<CapsuleCollider2D>().bounds.size.x / 2), transform.position.y - (GetComponent<CapsuleCollider2D>().bounds.size.y / 2)),
+            Vector2.down,
+            groundCheckDistance,
+            groundLayer);
+
+        if (hitL || hitR)
         {
             // print(hit.transform.gameObject.name);
             return GroundState.Grounded;

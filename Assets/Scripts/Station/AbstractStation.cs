@@ -19,7 +19,7 @@ public class AbstractStation : NetworkBehaviour
         isOccupied.Value = state;
     }
     
-    public virtual void StationAction()
+    public virtual void StationAction(bool isPressedThisFrame)
     {
         Debug.LogError("::: Interact method not implemented");
     }

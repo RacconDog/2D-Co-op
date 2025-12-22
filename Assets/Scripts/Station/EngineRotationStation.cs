@@ -25,8 +25,8 @@ public class EngineRotationStation : AbstractStation
 
         RayAngle(targetAngle);
     }
-    
-    override public void StationAction()
+
+    override public void StationAction(bool isPressedThisFrame)
     {
         
     }
