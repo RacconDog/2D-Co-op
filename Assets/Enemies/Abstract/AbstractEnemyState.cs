@@ -1,16 +1,7 @@
-using UnityEngine;
+ using UnityEngine;
 
-public abstract class AbstractEnemyState
+public abstract class AbstractEnemyState : StateMachineBehaviour
 {
-    protected Enemy enemy;
-
-    protected AbstractEnemyState(Enemy enemy)
-    {
-        this.enemy = enemy;
-    }
-
-    public virtual void Enter() { }
-    public virtual void Update() { }
-    public virtual void Exit() { }
+    [SerializeField] protected EnemyData enemyData;
 }
 

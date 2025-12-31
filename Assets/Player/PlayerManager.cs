@@ -3,5 +3,5 @@ using Unity.Netcode;
 
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField] public Color[] playerColors;
+    [SerializeField] public Color[] PLAYER_COLORS;
 }

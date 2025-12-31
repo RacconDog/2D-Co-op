@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [HideInInspector] public float bulletLifetime = 2f;
-    [HideInInspector] public float bulletSpeed = 2f;
+    [HideInInspector] public float BULLET_LIFETIME = 2f;
+    [HideInInspector] public float BULLET_SPEED = 2f;
 
     void Start()
     {
-        Destroy(gameObject, bulletLifetime);
+        Destroy(gameObject, BULLET_LIFETIME);
     }
 
     void Update()
     {
-        transform.Translate(Vector2.right * bulletSpeed * Time.deltaTime);
+        transform.Translate(Vector2.right * BULLET_SPEED * Time.deltaTime);
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShootStation : AbstractStation
 {
     [Header("Bullet Settings")]
+    [SerializeField] Transform muzzleTransform;
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float bulletSpeed = 10f;
     [SerializeField] float bulletLifetime = 10f;
@@ -27,9 +28,10 @@ public class ShootStation : AbstractStation
     void Awake()
     {
         // Initialize the start angle based on the station device's current rotation
-        startAngle = NormalizeTo180(Mathf.Round(stationDevice.transform.rotation.eulerAngles.z));
+        startAngle = NormalizeTo180(Mathf.Round(STATION_DEVICE.transform.rotation.eulerAngles.z));
 
         shootCooldown = 1f / bulletsPerSecond;
+        targetAngle = NormalizeTo180(Mathf.Round(STATION_DEVICE.transform.rotation.eulerAngles.z));
     }
 
     override public void StationAction(bool isPressedThisFrame)
@@ -38,12 +40,12 @@ public class ShootStation : AbstractStation
         {
             GameObject bullet = Instantiate(
                 bulletPrefab,
-                stationDevice.transform.position,
-                Quaternion.Euler(0, 0, stationDevice.transform.rotation.eulerAngles.z + UnityEngine.Random.Range(-bulletSpread, bulletSpread))
+                muzzleTransform.position,
+                Quaternion.Euler(0, 0, STATION_DEVICE.transform.rotation.eulerAngles.z + UnityEngine.Random.Range(-bulletSpread, bulletSpread))
             );
 
-            bullet.GetComponent<Bullet>().bulletSpeed = bulletSpeed;
-            bullet.GetComponent<Bullet>().bulletLifetime = bulletLifetime;
+            bullet.GetComponent<Bullet>().BULLET_SPEED = bulletSpeed;
+            bullet.GetComponent<Bullet>().BULLET_LIFETIME = bulletLifetime;
 
             shootCooldown = 1f / bulletsPerSecond;
         }
@@ -75,7 +77,7 @@ public class ShootStation : AbstractStation
         shootCooldown -= Time.deltaTime;
 
         // Get current z rotation (absolute
-        float currentAngle = stationDevice.transform.eulerAngles.z;
+        float currentAngle = STATION_DEVICE.transform.eulerAngles.z;
 
         // Smooth toward target
         float smoothedAngle = Mathf.SmoothDampAngle(
@@ -88,12 +90,12 @@ public class ShootStation : AbstractStation
 
 
         // Apply back
-        stationDevice.transform.rotation = Quaternion.Euler(0, 0, smoothedAngle);
+        STATION_DEVICE.transform.rotation = Quaternion.Euler(0, 0, smoothedAngle);
     }
 
     void RayAngle(float angle)
     {
-        Debug.DrawRay(stationDevice.transform.position, Quaternion.Euler(0, 0, angle) * Vector2.right * 10f, Color.red);
+        Debug.DrawRay(STATION_DEVICE.transform.position, Quaternion.Euler(0, 0, angle) * Vector2.right * 10f, Color.red);
     }
     
     float NormalizeTo180(float angle)

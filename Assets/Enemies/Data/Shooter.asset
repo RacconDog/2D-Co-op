@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd1a21f2d949baf42b6c20b6f64a3c01, type: 3}
   m_Name: Shooter
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  enemyName: Shooter
-  health: 10
-  speed: 5
-  damage: 3
-  enemyPrefab: {fileID: 0}
+  NAME: 
+  HEALTH: 0
+  SPEED: 3
+  DAMAGE: 0
+  VIEW_DISTANCE: 6
+  PREFAB: {fileID: 0}

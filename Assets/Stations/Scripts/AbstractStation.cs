@@ -5,7 +5,7 @@ using UnityEngine;
 public class AbstractStation : NetworkBehaviour
 {
     [Header("Abstract")]
-    [SerializeField] protected GameObject stationDevice;
+    [SerializeField] protected GameObject STATION_DEVICE;
     [SerializeField] public NetworkVariable<bool> isOccupied = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     protected virtual void Update()

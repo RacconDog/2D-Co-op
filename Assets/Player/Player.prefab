@@ -58,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -190,21 +190,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  moveSpeed: 2.11
-  moveSpeedCap: 1
-  moveDragFactor: 0.065
-  jumpBufferLength: 0.2
-  jumpSpeed: 3
-  inputActions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  playerRenderer: {fileID: 2122618527312552052}
-  animator: {fileID: 7268897872176659168}
-  groundCheckDistance: 0.1
-  groundLayer:
+  MOVE_SPEED: 5
+  MOVE_SPEED_CAP: 10
+  MOVE_DRAG_FACTOR: 0.5
+  JUMP_BUFFER_LENGTH: 10
+  JUMP_SPEED: 5
+  INPUT_ACTIONS: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  PLAYER_RENDERER: {fileID: 2122618527312552052}
+  ANIMATOR: {fileID: 7268897872176659168}
+  GROUND_CHECK_DISTANCE: 0.1
+  GROUND_LAYER:
     serializedVersion: 2
     m_Bits: 128
   curGroundState: 0
   lastFrameGroundState: 0
-  interactionDistance: 100
+  INTERACTION_DISTANCE: 100
   curStation: {fileID: 0}
 --- !u!114 &6079453361166249048
 MonoBehaviour:

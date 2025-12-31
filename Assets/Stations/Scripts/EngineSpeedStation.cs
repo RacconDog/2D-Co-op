@@ -7,13 +7,13 @@ using UnityEngine;
 public class EngineSpeedStation : AbstractStation
 {
     [Header("Engine Rotation Settings")]
-    [SerializeField] float MoveSpeed = 5.0f;
-    [SerializeField] float SpeedCap = 5.0f;
-    [SerializeField] Rigidbody2D shipRB;
-    [SerializeField] Transform thrusterTransform;
+    [SerializeField] float MOVE_SPEED = 5.0f;
+    [SerializeField] float SPEED_CAP = 5.0f;
+    [SerializeField] Rigidbody2D SHIP_RB;
+    [SerializeField] Transform THRUSTER_TRANSFORM;
 
-    [SerializeField] SpriteRenderer[] gearIndicators;
-    [SerializeField] Color[] gearColors;
+    [SerializeField] SpriteRenderer[] GEAR_INDICATORS;
+    [SerializeField] Color[] GEAR_COLORS;
 
     [SerializeField] int currentGear = 0;
     
@@ -24,15 +24,15 @@ public class EngineSpeedStation : AbstractStation
         if (isPressedThisFrame)
         {
             currentGear++;
-            currentGear %= gearIndicators.Length + 1;
+            currentGear %= GEAR_INDICATORS.Length + 1;
         }
 
-        for (int i = 0; i < gearIndicators.Length; i++)
+        for (int i = 0; i < GEAR_INDICATORS.Length; i++)
         {
-            gearIndicators[i].color = Color.black;
+            GEAR_INDICATORS[i].color = Color.black;
 
             if (i < currentGear)
-                gearIndicators[i].color = gearColors[currentGear];
+                GEAR_INDICATORS[i].color = GEAR_COLORS[currentGear];
         }
     }
 
@@ -41,18 +41,18 @@ public class EngineSpeedStation : AbstractStation
     {
         base.Update();
 
-        float angle = (thrusterTransform.rotation.eulerAngles.z + 90) * Mathf.Deg2Rad;
-        Vector2 forceVector = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * MoveSpeed * Time.deltaTime;
+        float angle = (THRUSTER_TRANSFORM.rotation.eulerAngles.z + 90) * Mathf.Deg2Rad;
+        Vector2 forceVector = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * MOVE_SPEED * Time.deltaTime;
 
         forceVector *= -1;
         
         forceVector *= currentGear / 3.0f;
 
-        shipRB.AddForce(forceVector * shipRB.mass, ForceMode2D.Force);
+        SHIP_RB.AddForce(forceVector * SHIP_RB.mass, ForceMode2D.Force);
 
-        if (shipRB.linearVelocity.magnitude > SpeedCap)
+        if (SHIP_RB.linearVelocity.magnitude > SPEED_CAP)
         {
-            shipRB.linearVelocity = shipRB.linearVelocity.normalized * SpeedCap;
+            SHIP_RB.linearVelocity = SHIP_RB.linearVelocity.normalized * SPEED_CAP;
         }
     }
 }

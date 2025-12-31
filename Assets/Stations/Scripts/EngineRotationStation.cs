@@ -5,8 +5,8 @@ using UnityEngine;
 public class EngineRotationStation : AbstractStation
 {
     [Header("Engine Rotation Settings")]
-    [SerializeField] float smoothTime = 0.3f;
-    [SerializeField] float smoothMaxSpeed = 0.3f;
+    [SerializeField] float SMOOTH_TIME = 0.3f;
+    [SerializeField] float SMOOTH_MAX_SPEED = 0.3f;
 
     float targetAngle = 0.0f;
 
@@ -36,23 +36,23 @@ public class EngineRotationStation : AbstractStation
         base.Update();
 
         // Get current z rotation (absolute)
-        float currentAngle = stationDevice.transform.eulerAngles.z;
+        float currentAngle = STATION_DEVICE.transform.eulerAngles.z;
 
         // Smooth toward target
         float smoothedAngle = Mathf.SmoothDampAngle(
             currentAngle,
             targetAngle - 90f,
             ref angularVelocity,
-            smoothTime,
-            smoothMaxSpeed
+            SMOOTH_TIME,
+            SMOOTH_MAX_SPEED
         );
 
         // Apply back
-        stationDevice.transform.rotation = Quaternion.Euler(0, 0, smoothedAngle);
+        STATION_DEVICE.transform.rotation = Quaternion.Euler(0, 0, smoothedAngle);
     }
 
     void RayAngle(float angle)
     {
-        Debug.DrawRay(stationDevice.transform.position, Quaternion.Euler(0, 0, angle) * Vector2.right * 10f, Color.red);
+        Debug.DrawRay(STATION_DEVICE.transform.position, Quaternion.Euler(0, 0, angle) * Vector2.right * 10f, Color.red);
     }
 }

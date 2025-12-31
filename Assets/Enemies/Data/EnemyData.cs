@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class EnemyData : ScriptableObject
 {
-    public string enemyName;
-    public int health;
-    public float speed;
-    public int damage;
-    public GameObject enemyPrefab;
+    public string NAME;
+    public int HEALTH;
+    public float SPEED;
+    public int DAMAGE;
+    public float VIEW_DISTANCE;
+    public GameObject PREFAB;
 }
