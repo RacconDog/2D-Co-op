@@ -16,8 +16,8 @@ public class PlayerController : NetworkBehaviour
 
     [Header("Jump")]
     [SerializeField] float JUMP_BUFFER_LENGTH = 10f;
-    float jumpBufferCurTime = 0f;
     [SerializeField] float JUMP_SPEED = 5f;
+    [SerializeField] float jumpBufferCurTime = 0f;
 
     [Header("References")]
     [SerializeField] InputActionAsset INPUT_ACTIONS;
@@ -127,6 +127,7 @@ public class PlayerController : NetworkBehaviour
 
     void Movement()
     {
+        
         if (IsOwner)
         {
             // Interaction Logic

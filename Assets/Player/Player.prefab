@@ -190,11 +190,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  MOVE_SPEED: 5
-  MOVE_SPEED_CAP: 10
-  MOVE_DRAG_FACTOR: 0.5
-  JUMP_BUFFER_LENGTH: 10
-  JUMP_SPEED: 5
+  MOVE_SPEED: 2
+  MOVE_SPEED_CAP: 3
+  MOVE_DRAG_FACTOR: 0.755
+  JUMP_BUFFER_LENGTH: 0.1
+  JUMP_SPEED: 3
+  jumpBufferCurTime: 0
   INPUT_ACTIONS: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   PLAYER_RENDERER: {fileID: 2122618527312552052}
   ANIMATOR: {fileID: 7268897872176659168}
@@ -202,8 +203,8 @@ MonoBehaviour:
   GROUND_LAYER:
     serializedVersion: 2
     m_Bits: 128
-  curGroundState: 0
-  lastFrameGroundState: 0
+  curGroundState: 1
+  lastFrameGroundState: 1
   INTERACTION_DISTANCE: 100
   curStation: {fileID: 0}
 --- !u!114 &6079453361166249048
@@ -295,7 +296,7 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: Game
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -315,7 +316,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 45af914fb5a757c2f91f0a96291fa928, type: 2}
+  m_Material: {fileID: 6200000, guid: 7aff06c74478a66429432a1cc20c7cef, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
