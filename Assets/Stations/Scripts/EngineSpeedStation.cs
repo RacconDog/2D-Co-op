@@ -3,6 +3,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.Callbacks;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class EngineSpeedStation : AbstractStation
 {
@@ -16,6 +17,8 @@ public class EngineSpeedStation : AbstractStation
     [SerializeField] Color[] GEAR_COLORS;
 
     [SerializeField] int currentGear = 0;
+
+    [SerializeField] VisualEffect vfx;
     
     override public void StationUpdateDir(Vector2 dir) {}
 
@@ -40,6 +43,8 @@ public class EngineSpeedStation : AbstractStation
     protected override void Update()
     {
         base.Update();
+
+        vfx.SetFloat("EngineSpeed", currentGear);
 
         float angle = (THRUSTER_TRANSFORM.rotation.eulerAngles.z + 90) * Mathf.Deg2Rad;
         Vector2 forceVector = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * MOVE_SPEED * Time.deltaTime;
