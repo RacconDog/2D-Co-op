@@ -13,13 +13,19 @@ public class EngineRotationStation : AbstractStation
     //internal smoothdamp velo
     float angularVelocity = 0.0f;
 
+    float dummyRotate = 0f;
+
     override public void StationUpdateDir(Vector2 dir)
     {
+        dummyRotate = 1f;
+
         if (dir.magnitude < 0.4f)
         {
+            dummyRotate = 0f;
             // If the direction is too small, do not rotate, kinda like deadzone
             return;
         }
+
 
         targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
@@ -35,6 +41,7 @@ public class EngineRotationStation : AbstractStation
     {
         base.Update();
 
+
         // Get current z rotation (absolute)
         float currentAngle = STATION_DEVICE.transform.eulerAngles.z;
 
@@ -44,7 +51,7 @@ public class EngineRotationStation : AbstractStation
             targetAngle - 90f,
             ref angularVelocity,
             SMOOTH_TIME,
-            SMOOTH_MAX_SPEED
+            SMOOTH_MAX_SPEED * dummyRotate
         );
 
         // Apply back

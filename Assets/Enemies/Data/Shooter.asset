@@ -12,9 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd1a21f2d949baf42b6c20b6f64a3c01, type: 3}
   m_Name: Shooter
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  PREFAB: {fileID: 0}
   NAME: 
   HEALTH: 0
-  SPEED: 3
   DAMAGE: 0
-  VIEW_DISTANCE: 6
-  PREFAB: {fileID: 0}
+  SPEED_MAX: 3
+  SPEED_ACCEL: 0.5
+  VIEW_DISTANCE: 15.05
+  RANGE: 8.15
+  RANGE_PADDING: 0.82
+  DRIFT_FORCE: 100
+  DRIFT_OFFSET_ANGLE: 30
+  ORBIT_MIN: 10
+  ORBIT_MAX: 15
+  DebugColor: {r: 0, g: 0, b: 1, a: 1}

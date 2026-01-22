@@ -4,10 +4,14 @@ using UnityEngine;
 public class ShooterEnemy : AbstractEnemy
 {   
     Transform shipTransform;
+    [SerializeField] Transform shipSprite;
     bool shipInView;
+    bool shipInRange;
     Animator animator;
 
     [SerializeField] EnemyData enemyData;
+
+    SpriteRenderer spriteRenderer;
 
     void Start()
     {
@@ -17,7 +21,7 @@ public class ShooterEnemy : AbstractEnemy
 
     void Update()
     {
-        if (Vector2.Distance(transform.position, shipTransform.position) < enemyData.VIEW_DISTANCE)
+        if (Vector2.Distance(transform.position, shipTransform.position) - shipSprite.localScale.x * 0.5f < enemyData.VIEW_DISTANCE)
         {
             shipInView = true;
         }
@@ -26,11 +30,24 @@ public class ShooterEnemy : AbstractEnemy
             shipInView = false;
         }
 
+        if (Vector2.Distance(transform.position, shipTransform.position) > enemyData.RANGE - enemyData.RANGE_PADDING &&
+            Vector2.Distance(transform.position, shipTransform.position) < enemyData.RANGE + enemyData.RANGE_PADDING)
+        {
+            shipInRange = true;
+        }
+        else
+        {
+            shipInRange = false;
+        }
+
         animator.SetBool("ShipInView", shipInView);
-        DebugDrawCircle(transform.position, enemyData.VIEW_DISTANCE);
+        animator.SetBool("ShipInRange", shipInRange);
+
+        DebugDrawCircle(shipTransform.position, enemyData.RANGE - enemyData.RANGE_PADDING, Color.softRed);
+        DebugDrawCircle(shipTransform.position, enemyData.RANGE + enemyData.RANGE_PADDING, Color.softRed);
     }
 
-    void DebugDrawCircle(Vector2 pos, float radius)
+    void DebugDrawCircle(Vector2 pos, float radius, Color color)
     {
         int segments = 100;
         float angle = 0f;
@@ -40,7 +57,7 @@ public class ShooterEnemy : AbstractEnemy
         {
             angle += 2 * Mathf.PI / segments;
             Vector3 nextPoint = pos + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-            Debug.DrawLine(lastPoint, nextPoint, Color.red);
+            Debug.DrawLine(lastPoint, nextPoint, color);
             lastPoint = nextPoint;
         }
     }
