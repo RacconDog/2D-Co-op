@@ -5,7 +5,7 @@ using UnityEngine;
 public class ChasingState : AbstractEnemyState
 {    
     Transform shipTransform;
-    GameObject THIS;
+    GameObject thisGO;
 
     Vector2 smoothDampVelocity;
 
@@ -16,23 +16,23 @@ public class ChasingState : AbstractEnemyState
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         shipTransform = GameObject.Find("Ship").transform;
-        THIS = animator.gameObject;
+        thisGO = animator.gameObject;
 
         EnemyManager.AddEnemy(animator.gameObject, EnemyManager.EnemyState.Chasing);
 
-        startPosition = THIS.transform.position;
+        startPosition = thisGO.transform.position;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //rotate to face 
-        THIS.transform.right = -(shipTransform.position - THIS.transform.position);
+        thisGO.transform.right = -(shipTransform.position - thisGO.transform.position);
 
         //move towards ship
         targetPosition = (startPosition - shipTransform.position).normalized * enemyData.RANGE;
         
-        THIS.transform.position = Vector2.SmoothDamp(
-            THIS.transform.position,
+        thisGO.transform.position = Vector2.SmoothDamp(
+            thisGO.transform.position,
             targetPosition,
             ref smoothDampVelocity, 
             enemyData.SPEED_ACCEL, 

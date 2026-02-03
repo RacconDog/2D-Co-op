@@ -6,6 +6,7 @@ TagManager:
   tags:
   - --------------------
   - Station
+  - Projectile
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - Player
   - Indoor Default
   - CullInEditor
-  - 
-  - 
+  - Bullet
+  - Enemy
   - 
   - 
   - 

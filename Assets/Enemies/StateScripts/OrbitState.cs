@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 public class OrbitState : AbstractEnemyState
 {
     Transform shipTransform;
-    GameObject THIS;
+    GameObject thisGO;
     Rigidbody2D rb;
 
     Vector2 smoothDampVelocity;
@@ -30,8 +30,8 @@ public class OrbitState : AbstractEnemyState
         animator.SetBool("IsDrifting", isDrifting);
 
         shipTransform = GameObject.Find("Ship").transform;
-        THIS = animator.gameObject;
-        rb = THIS.GetComponent<Rigidbody2D>();
+        thisGO = animator.gameObject;
+        rb = thisGO.GetComponent<Rigidbody2D>();
 
         curTime = 1f;
     }
@@ -42,7 +42,10 @@ public class OrbitState : AbstractEnemyState
 
         animator.SetBool("IsDrifting", isDrifting);
 
-        Debug.DrawRay(THIS.transform.position, driftVector, Color.cyan);
+        Debug.DrawRay(thisGO.transform.position, driftVector, Color.cyan);
+
+        thisGO.transform.right = -(shipTransform.position - thisGO.transform.position);
+
 
         if (!hasDrifted)
         {
@@ -51,10 +54,10 @@ public class OrbitState : AbstractEnemyState
             randomDir = Random.Range(0, 2) == 0 ? -1 : 1;
 
             float driftAngle = Mathf.Atan2(
-                shipTransform.position.y - THIS.transform.position.y, 
-                shipTransform.position.x - THIS.transform.position.x);
+                shipTransform.position.y - thisGO.transform.position.y, 
+                shipTransform.position.x - thisGO.transform.position.x);
 
-            driftAngle += THIS.transform.rotation.eulerAngles.z;
+            driftAngle += thisGO.transform.rotation.eulerAngles.z;
             driftAngle += randomDir * enemyData.DRIFT_OFFSET_ANGLE;
 
             driftAngle -= Random.Range(-enemyData.DRIFT_OFFSET_ANGLE_PADDING, enemyData.DRIFT_OFFSET_ANGLE_PADDING) / 2;

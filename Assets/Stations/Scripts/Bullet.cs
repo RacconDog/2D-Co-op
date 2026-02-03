@@ -7,6 +7,8 @@ public class Bullet : MonoBehaviour
     [HideInInspector] public float BULLET_LIFETIME = 2f;
     [HideInInspector] public float BULLET_SPEED = 2f;
 
+    [SerializeField] public ProjectileData bulletData;
+
     void Start()
     {
         Destroy(gameObject, BULLET_LIFETIME);

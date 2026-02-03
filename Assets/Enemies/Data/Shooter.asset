@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   PREFAB: {fileID: 0}
   NAME: 
-  HEALTH: 0
+  HEALTH: 8
   DAMAGE: 0
   SPEED_MAX: 3
   SPEED_ACCEL: 1
