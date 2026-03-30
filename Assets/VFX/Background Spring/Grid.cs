@@ -3,65 +3,74 @@ using System.Collections.Generic;
 
 public class Grid : MonoBehaviour
 {
-    [SerializeField] Vector2 size = new Vector2(20, 20);
-    [SerializeField] Vector2 spacing = new Vector2(1, 1);
+    [SerializeField] Vector2Int size = new Vector2Int(10, 10);
+    [SerializeField] Vector2 spacing = Vector2.one;
 
     public PointMass[,] points { get; private set; }
     PointMass[,] fixedPoints;
 
     Spring[] springs;
- 
+
+    int originX;
+    int originY;
+
     void Awake()
     {
-        CreateGrid(size, spacing);
+        CreateGrid();
     }
 
     void Update()
     {
-        // update springs
-        foreach (var spring in springs)
-            spring.Update();
+        // Update springs
+        foreach (var s in springs)
+            s.UpdateSpring();
 
-        // update points
+        // Update points
         foreach (var p in points)
             p.UpdatePoint();
+
+        // Example: shift the grid to the right
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            ShiftRight();
     }
 
-    void CreateGrid(Vector2 size, Vector2 spacing)
+    void CreateGrid()
     {
+        int cols = size.x;
+        int rows = size.y;
+
+        points = new PointMass[cols, rows];
+        fixedPoints = new PointMass[cols, rows];
         var springList = new List<Spring>();
 
-        int numColumns = (int)(size.x / spacing.x) + 1;
-        int numRows = (int)(size.y / spacing.y) + 1;
-
-        points = new PointMass[numColumns, numRows];
-        fixedPoints = new PointMass[numColumns, numRows];
-
-        for (int y = 0; y < numRows; y++)
+        // Create points
+        for (int y = 0; y < rows; y++)
+        for (int x = 0; x < cols; x++)
         {
-            for (int x = 0; x < numColumns; x++)
-            {
-                Vector3 pos = new Vector3(x * spacing.x, y * spacing.y, 0);
-                pos.x -= size.x / 2;
-                pos.y -= size.y / 2;
-                
-                points[x, y] = new PointMass(pos, 1);
-                fixedPoints[x, y] = new PointMass(pos, 0);
-            }
+            Vector3 pos = new Vector3(
+                (originX + x) * spacing.x,
+                (originY + y) * spacing.y,
+                0f
+            );
+
+            points[x, y] = new PointMass(pos, 1f);
+            fixedPoints[x, y] = new PointMass(pos, 0f);
         }
 
+        // Create springs
+        const float stiffness = 0.28f;
+        const float damping = 0.06f;
 
-        for (int y = 0; y < numRows; y++)
-        for (int x = 0; x < numColumns; x++)
+        for (int y = 0; y < rows; y++)
+        for (int x = 0; x < cols; x++)
         {
-            if (x == 0 || y == 0 || x == numColumns - 1 || y == numRows - 1)
+            // Edge points attached to fixed anchors
+            if (x == 0 || y == 0 || x == cols - 1 || y == rows - 1)
                 springList.Add(new Spring(fixedPoints[x, y], points[x, y], 0.1f, 0.1f));
             else if (x % 3 == 0 && y % 3 == 0)
                 springList.Add(new Spring(fixedPoints[x, y], points[x, y], 0.002f, 0.02f));
 
-            const float stiffness = 0.28f;
-            const float damping = 0.06f;
-
+            // Horizontal and vertical springs
             if (x > 0)
                 springList.Add(new Spring(points[x - 1, y], points[x, y], stiffness, damping));
             if (y > 0)
@@ -71,34 +80,97 @@ public class Grid : MonoBehaviour
         springs = springList.ToArray();
     }
 
+    // ============================
+    // Sliding window: recycle points
+    // ============================
+
+    public void ShiftRight()
+    {
+        originX++; // camera moves right
+
+        int cols = points.GetLength(0);
+        int rows = points.GetLength(1);
+
+        for (int y = 0; y < rows; y++)
+        {
+            // Save leftmost column to recycle
+            PointMass recycled = points[0, y];
+
+            // Shift references left
+            for (int x = 0; x < cols - 1; x++)
+                points[x, y] = points[x + 1, y];
+
+            // Recycle leftmost column to the right
+            points[cols - 1, y] = recycled;
+
+            // Reset its position in world space
+            ResetPoint(recycled, cols - 1, y);
+        }
+    }
+
+    void ResetPoint(PointMass p, int localX, int localY)
+    {
+        int gx = originX + localX;
+        int gy = originY + localY;
+
+        p.pos = new Vector3(
+            gx * spacing.x,
+            gy * spacing.y,
+            0f
+        );
+
+        p.velo = Vector3.zero;
+    }
+
+    // ============================
+    // Forces
+    // ============================
+
     public void ApplyDirectedForce(Vector3 force, Vector3 position, float radius)
     {
-    	foreach (var mass in points)
-    		if (Vector3.Distance(position, mass.pos) * Vector3.Distance(position, mass.pos) < radius * radius)
-    			mass.ApplyForce(10 * force / (10 + Vector3.Distance(position, mass.pos)));
+        float r2 = radius * radius;
+
+        foreach (var mass in points)
+        {
+            float dist2 = (mass.pos - position).sqrMagnitude;
+            if (dist2 < r2)
+            {
+                mass.ApplyForce(force / (1f + Mathf.Sqrt(dist2)));
+            }
+        }
     }
+
     public void ApplyImplosiveForce(float force, Vector3 position, float radius)
     {
-    	foreach (var mass in points)
-    	{
-    		float dist2 = Vector3.Distance(position, mass.pos) * Vector3.Distance(position, mass.pos);
-    		if (dist2 < radius * radius)
-    		{
-    			mass.ApplyForce(10 * force * (position - mass.pos) / (100 + dist2));
-    			mass.IncreaseDamping(0.6f);
-    		}
-    	}
+        float r2 = radius * radius;
+
+        foreach (var mass in points)
+        {
+            Vector3 delta = position - mass.pos;
+            float dist2 = delta.sqrMagnitude;
+
+            if (dist2 < r2)
+            {
+                mass.ApplyForce(delta * force / (dist2 + 0.01f));
+                mass.IncreaseDamping(0.6f);
+            }
+        }
     }
+
     public void ApplyExplosiveForce(float force, Vector3 position, float radius)
     {
-    	foreach (var mass in points)
-    	{
-    		float dist2 = Vector3.Distance(position, mass.pos) * Vector3.Distance(position, mass.pos);
-    		if (dist2 < radius * radius)
-    		{
-    			mass.ApplyForce(100 * force * (mass.pos - position) / (10000 + dist2));
-    			mass.IncreaseDamping(0.6f);
-    		}
-    	}
+        float r2 = radius * radius;
+
+        foreach (var mass in points)
+        {
+            Vector3 delta = mass.pos - position;
+            float dist2 = delta.sqrMagnitude;
+
+            if (dist2 < r2)
+            {
+                mass.ApplyForce(delta * force / (dist2 + 0.01f));
+                mass.IncreaseDamping(0.6f);
+            }
+        }
     }
 }

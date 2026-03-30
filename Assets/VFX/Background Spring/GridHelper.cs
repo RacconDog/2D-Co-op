@@ -1,13 +1,11 @@
 using UnityEngine;
-using System.Collections;
-using System;
-using System.Collections.Generic;
 
 public class PointMass
 {
     public Vector3 pos;
     public Vector3 velo;
     public float inverseMass;
+
     private Vector3 acceleration;
     private float damping = 0.98f;
 
@@ -41,35 +39,39 @@ public class PointMass
     }
 }
 
-
 public struct Spring
 {
-	public PointMass end1;
-	public PointMass end2;
-	public float targetLength;
-	public float stiffness;
-	public float damping;
+    public PointMass end1;
+    public PointMass end2;
+    public float targetLength;
+    public float stiffness;
+    public float damping;
 
-	public Spring(PointMass end1, PointMass end2, float stiffness, float damping)
-	{
-		this.end1 = end1;
-		this.end2 = end2;
-		this.stiffness = stiffness;
-		this.damping = damping;
-		targetLength = Vector3.Distance(end1.pos, end2.pos) * 0.95f;
-	}
+    public Spring(PointMass end1, PointMass end2, float stiffness, float damping)
+    {
+        this.end1 = end1;
+        this.end2 = end2;
+        this.stiffness = stiffness;
+        this.damping = damping;
+        // The problematic part before the camera logic:
+        targetLength = Vector3.Distance(end1.pos, end2.pos) * 0.95f;
+    }
 
-	public void Update()
-	{
-		var x = end1.pos - end2.pos;
-		float length = x.magnitude;
-		// these springs can only pull, not push 
-		if (length <= targetLength)
-			return;
-		x = (x / length) * (length - targetLength);
-		var dv = end2.velo - end1.velo;
-		var force = stiffness * x - dv * damping;
-		end1.ApplyForce(-force);
-		end2.ApplyForce(force);
-	}
+    public void UpdateSpring()
+    {
+        Vector3 x = end1.pos - end2.pos;
+        float length = x.magnitude;
+
+        // Only pull, not push
+        if (length <= targetLength)
+            return;
+
+        x = (x / length) * (length - targetLength);
+        Vector3 dv = end2.velo - end1.velo;
+        Vector3 force = stiffness * x - dv * damping;
+
+        end1.ApplyForce(-force);
+        end2.ApplyForce(force);
+    }
 }
+

@@ -7,18 +7,12 @@ public class GridTest : MonoBehaviour
     [SerializeField] float radius = 0;
     [SerializeField] Vector2 pos = Vector2.zero;
     [SerializeField] float strength;
-    [SerializeField] float frequency = 1f;
-    
-    float time = 0;
 
     void Update()
     {
-
-        if (time > 1f / frequency)
+        if (Input.GetKey(KeyCode.Space))
         {
-            grid.ApplyExplosiveForce(strength, pos, radius);
-            time = 0;
+            grid.ApplyDirectedForce(Vector2.left * strength, pos, radius);
         }
-        time += Time.deltaTime;
     }
 }

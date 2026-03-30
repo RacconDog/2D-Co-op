@@ -589,7 +589,7 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Standalone: URP_COMPATIBILITY_MODE
+    Standalone: URP_COMPATIBILITY_MODE;VOL_FX
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

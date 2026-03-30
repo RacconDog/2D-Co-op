@@ -1,5 +1,12 @@
 ﻿<Solution>
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="VolFx.csproj" />
+  <Project Path="Tools.Runtime.csproj" />
+  <Project Path="VolFx.Editor.csproj" />
+  <Project Path="ScreenFx.Editor.csproj" />
+  <Project Path="ScreenFx.csproj" />
   <Project Path="vkg.virgoc.csproj" />
+  <Project Path="Tools.Editor.csproj" />
+  <Project Path="VolFx.Samples.csproj" />
   <Project Path="vkg.virgoc.Editor.csproj" />
 </Solution>

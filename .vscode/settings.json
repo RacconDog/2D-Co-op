@@ -56,15 +56,28 @@
         "temp/": true,
         "Temp/": true
     },
+
     "files.associations": {
         "*.asset": "yaml",
         "*.meta": "yaml",
         "*.prefab": "yaml",
-        "*.unity": "yaml"
+        "*.unity": "yaml",
+        "*.hlsl": "hlsl",
+        "*.cginc": "hlsl",
+        "*.shader": "hlsl"
     },
+
     "explorer.fileNesting.enabled": true,
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
+
+    "unityshader.suggest.basic": true,
+    "unityshader.suggest.unity": true,
+    "unityshader.suggest.urp": true,
+    "unityshader.mobile.enabled": true,
+    "unityshader.analysis.semanticAnalysis": true,
+
+
     "dotnet.defaultSolution": "2D-Co-op.slnx"
 }

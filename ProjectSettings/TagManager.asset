@@ -21,7 +21,7 @@ TagManager:
   - CullInEditor
   - Bullet
   - Enemy
-  - 
+  - Background
   - 
   - 
   - 
@@ -41,6 +41,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2906985911
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
