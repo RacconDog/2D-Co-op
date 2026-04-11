@@ -22,6 +22,28 @@ MonoBehaviour:
   m_Angle:
     m_OverrideState: 1
     m_Value: 0
+--- !u!114 &-9002738860626672598
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f51d4ab7f92eb9f47a34d089e35b58d3, type: 3}
+  m_Name: WeatherSettings
+  m_EditorClassIdentifier: Assembly-CSharp::ScreenFx.WeatherSettings
+  active: 1
+  _snow:
+    m_OverrideState: 1
+    m_Value: 0
+  _sun:
+    m_OverrideState: 1
+    m_Value: 0
+  _clouds:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &-8378706888850899671
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1518,7 +1540,7 @@ MonoBehaviour:
   - {fileID: -348599393458081530}
   - {fileID: -3035612600009852889}
   - {fileID: 3381041184276529930}
-  - {fileID: 1320156429873762947}
+  - {fileID: -9002738860626672598}
 --- !u!114 &156332030701414761
 MonoBehaviour:
   m_ObjectHideFlags: 3

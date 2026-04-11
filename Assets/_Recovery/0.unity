@@ -1182,7 +1182,7 @@ GameObject:
   - component: {fileID: 466606640}
   - component: {fileID: 466606641}
   m_Layer: 0
-  m_Name: Player Preview 2
+  m_Name: Player Slot 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1372,23 +1372,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43b2b7d30fe5ebc44a63c02dae599d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  UIHolder: {fileID: 1921187161}
-  GameHolder: {fileID: 1038858776}
   menus:
   - {fileID: 19321233}
   - {fileID: 1634575773}
-  playerPreviews:
-  - {fileID: 628043919}
-  - {fileID: 466606641}
-  - {fileID: 1193511409}
-  - {fileID: 1991010260}
-  skinOptions:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 1, g: 0.5351044, b: 0, a: 1}
-  - {r: 0.98929596, g: 1, b: 0, a: 1}
-  - {r: 0.011263967, g: 1, b: 0, a: 1}
-  - {r: 0, g: 0.6686821, b: 1, a: 1}
-  - {r: 0.4648342, g: 0, b: 1, a: 1}
+  currentMenuIndex: 0
 --- !u!1 &540184406
 GameObject:
   m_ObjectHideFlags: 0
@@ -1900,7 +1887,7 @@ GameObject:
   - component: {fileID: 628043918}
   - component: {fileID: 628043919}
   m_Layer: 0
-  m_Name: Player Preview 1
+  m_Name: Player Slot 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7563,11 +7550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5635088c0de8ac545a7e2d2143130f17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 4118458883571346800, guid: 8f117078870ef694482433a19a5bc54e, type: 3}
-  GameContainer: {fileID: 1038858776}
-  spawnPoints:
-  - {fileID: 1062566238}
-  - {fileID: 653527070}
 --- !u!4 &1096440795
 Transform:
   m_ObjectHideFlags: 0
@@ -7598,7 +7580,7 @@ MonoBehaviour:
   m_NotificationBehavior: 0
   m_MaxPlayerCount: -1
   m_AllowJoining: 1
-  m_JoinBehavior: 0
+  m_JoinBehavior: 2
   m_PlayerJoinedEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -7870,7 +7852,7 @@ GameObject:
   - component: {fileID: 1193511408}
   - component: {fileID: 1193511409}
   m_Layer: 0
-  m_Name: Player Preview 3
+  m_Name: Player Slot 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15281,7 +15263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3185836075
+  GlobalObjectIdHash: 4127217576
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -18241,9 +18223,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 513529567}
   - {fileID: 1282971905}
   - {fileID: 2061049790}
+  - {fileID: 513529567}
   - {fileID: 495084153}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18337,7 +18319,7 @@ GameObject:
   - component: {fileID: 1991010259}
   - component: {fileID: 1991010260}
   m_Layer: 0
-  m_Name: Player Preview 4
+  m_Name: Player Slot 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20742,8 +20724,8 @@ SceneRoots:
   - {fileID: 1096440795}
   - {fileID: 1988542581}
   - {fileID: 649444292}
-  - {fileID: 1523281915}
   - {fileID: 1038858777}
   - {fileID: 1921187162}
+  - {fileID: 1523281915}
   - {fileID: 1062566238}
   - {fileID: 653527070}

@@ -1,33 +1,33 @@
 using System;
-using Unity.Netcode;
 using UnityEngine;
 
-public class AbstractStation : NetworkBehaviour
+public class AbstractStation : MonoBehaviour
 {
     [Header("Abstract")]
     [SerializeField] protected GameObject STATION_DEVICE;
-    [SerializeField] public NetworkVariable<bool> isOccupied = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+    // Local occupancy state
+    public bool isOccupied = false;
 
     protected virtual void Update()
     {
-        // GameObject.Find("Station1").GetComponent<SpriteRenderer>().color = isOccupied.Value ? Color.red : Color.green;
+        // // Optional debug: show occupancy color
+        // if (STATION_DEVICE != null)
+        //     STATION_DEVICE.GetComponent<Renderer>().material.color = isOccupied ? Color.red : Color.green;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void SetIsOccupiedServerRpc(bool state, ServerRpcParams rpcParams = default)
+    public void SetIsOccupied(bool state)
     {
-        isOccupied.Value = state;
+        isOccupied = state;
     }
-    
+
     public virtual void StationAction(bool isPressedThisFrame)
     {
-        Debug.LogError("::: Interact method not implemented");
+        Debug.LogWarning("::: StationAction method not implemented");
     }
+
     public virtual void StationUpdateDir(Vector2 dir)
     {
-        Debug.LogError("::: StationUpdateDir method not implemented");
+        Debug.LogWarning("::: StationUpdateDir method not implemented");
     }
-
-
-    
 }
